@@ -1,8 +1,9 @@
 require 'trello'
 require 'gap_identifier/card_actions_finder'
+require 'gap_identifier/time_formatter'
+require 'gap_identifier/configuration'
 require 'gap_identifier/cards_finder'
 require 'gap_identifier/lists_finder'
-require 'gap_identifier/configuration'
 
 module GapIdentifier
   class << self
