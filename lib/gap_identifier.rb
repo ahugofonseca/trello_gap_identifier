@@ -1,4 +1,5 @@
 require 'trello'
+require 'gap_identifier/lists_average_time_calculator'
 require 'gap_identifier/card_actions_finder'
 require 'gap_identifier/time_formatter'
 require 'gap_identifier/configuration'

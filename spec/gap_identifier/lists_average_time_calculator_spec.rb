@@ -1,0 +1,60 @@
+require 'spec_helper'
+
+RSpec.describe GapIdentifier::ListsAverageTimeCalculator do
+  before do
+    allow(GapIdentifier::CardsFinder).to receive(:call)
+    allow(GapIdentifier::ListsFinder).to receive(:call)
+  end
+
+  describe 'initialize' do
+    it 'calls GapIdentifier::CardsFinder.call' do
+      expect(GapIdentifier::CardsFinder).to receive(:call)
+
+      described_class.new
+    end
+
+    it 'calls GapIdentifier::ListsFinder.call' do
+      expect(GapIdentifier::ListsFinder).to receive(:call)
+
+      described_class.new
+    end
+  end
+
+  describe '#calc_total_time' do
+    it 'calculates the list total time according the number of time pairs' do
+      time_pairs_list = [[1, 2]]
+
+      expect(described_class.new.calc_total_time(time_pairs_list)).to eq 1
+    end
+  end
+
+  describe '#calc_list_total_time_and_counter' do
+    context 'when card list id is equal the required list_id' do
+      it 'returns total time and counter according with cards_list values' do
+        list_id = 1
+        cards_list = [list: 1, total_time: 1]
+        list_card_size = cards_list.size - 1
+
+        expected_total_time, expected_counter = described_class.new
+          .calc_list_total_time_and_counter(list_id, cards_list, list_card_size)
+
+        expect(expected_total_time).to eq 1
+        expect(expected_counter).to eq 1
+      end
+    end
+
+    context 'when card list id is not equal the required list_id' do
+      it 'returns 0 total time and 0 counter' do
+        list_id = 2
+        cards_list = [list: 1, total_time: 1]
+        list_card_size = cards_list.size - 1
+
+        expected_total_time, expected_counter = described_class.new
+          .calc_list_total_time_and_counter(list_id, cards_list, list_card_size)
+
+        expect(expected_total_time).to eq 0
+        expect(expected_counter).to eq 0
+      end
+    end
+  end
+end
