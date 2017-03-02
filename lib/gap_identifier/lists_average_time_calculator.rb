@@ -31,5 +31,21 @@ module GapIdentifier
 
       return total_time, count
     end
+
+    def store_list_average_time(cards_list)
+      list_card_size = cards_list.count - 1
+
+      @lists.each do |list|
+        total_time, count = calc_list_total_time_and_counter(
+          list[:id], cards_list, list_card_size
+        )
+
+        list[:average_time] = if count > 0
+                                total_time / count
+                              else
+                                total_time
+                              end
+      end
+    end
   end
 end

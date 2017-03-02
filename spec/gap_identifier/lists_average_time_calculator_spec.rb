@@ -57,4 +57,29 @@ RSpec.describe GapIdentifier::ListsAverageTimeCalculator do
       end
     end
   end
+
+  describe '#store_list_average_time' do
+    let(:subject) { described_class.new }
+
+    before do
+      allow(GapIdentifier::ListsFinder).to receive(:call).and_return([{ id: 1}])
+      allow(subject).to receive(:calc_list_total_time_and_counter).and_return([30, 2])
+    end
+
+    it 'calls ListsAverageTimeCalculator#calc_list_total_time_and_counter' do
+      expect(subject).to receive(:calc_list_total_time_and_counter).and_return([30, 2])
+
+      cards_list = [list: 1, total_time: 30]
+
+      subject.store_list_average_time(cards_list)
+    end
+
+    it 'stores list average time on @lists' do
+      cards_list = [list: 1, total_time: 30]
+
+      subject.store_list_average_time(cards_list)
+
+      expect(subject.instance_eval('@lists').first[:average_time]).to eq 15
+    end
+  end
 end
