@@ -4,6 +4,30 @@ module GapIdentifier
       new.call
     end
 
+    def call
+      cards_list = []
+      @cards.each do |card|
+        card_actions_list = trello_card_actions(card)
+
+        @lists.each do |list|
+          time_pairs_list = fetch_list_times_pair(list, card_actions_list)
+          total_time      = calc_total_time(time_pairs_list)
+
+          next unless total_time > 0
+
+          cards_list << {
+            list:       list[:id],
+            card:       card[:id],
+            total_time: total_time
+          }
+        end
+      end
+
+      store_list_average_time(cards_list)
+
+      cards_list
+    end
+
     def initialize
       @cards = GapIdentifier::CardsFinder.call
       @lists = GapIdentifier::ListsFinder.call

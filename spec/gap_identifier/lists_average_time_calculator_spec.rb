@@ -183,4 +183,40 @@ RSpec.describe GapIdentifier::ListsAverageTimeCalculator do
       subject.trello_card_actions(card)
     end
   end
+
+  describe '#call' do
+    before do
+      allow(GapIdentifier::CardsFinder).to receive(:call).and_return([{ id: 1}])
+      allow(GapIdentifier::ListsFinder).to receive(:call).and_return([{ id: 1}])
+
+      card_actions_list = [
+          {
+            action_time: "2014-04-08T18:50:15.000Z",
+            from: 1,
+            to: 2
+          },
+          {
+            action_time: "2014-04-08T18:51:15.000Z",
+            from: 2,
+            to: 3
+          }
+        ]
+
+      allow(subject).to receive(:trello_card_actions).and_return(card_actions_list)
+      allow(subject).to receive(:fetch_list_times_pair).and_return([["2014-04-08T18:50:15.000Z", "2014-04-08T18:51:15.000Z"]])
+      allow(subject).to receive(:calc_total_time).and_return(60)
+    end
+
+    it 'returns a list of cards total time' do
+      expect(subject.call).to match_array(
+        [
+          {
+            list: 1,
+            card: 1,
+            total_time: 60
+          }
+        ]
+      )
+    end
+  end
 end
