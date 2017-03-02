@@ -82,4 +82,77 @@ RSpec.describe GapIdentifier::ListsAverageTimeCalculator do
       expect(subject.instance_eval('@lists').first[:average_time]).to eq 15
     end
   end
+
+  describe '#fetch_list_time_pairs' do
+    let(:subject) { described_class.new }
+
+    context 'when it finds pair' do
+      it 'returns time pairs list' do
+        card_actions_list = [
+          {
+            action_time: "2014-04-08T18:50:15.000Z",
+            from: 1,
+            to: 2
+          },
+          {
+            action_time: "2014-04-08T18:51:15.000Z",
+            from: 2,
+            to: 3
+          }
+        ]
+
+        list = { id: 2 }
+
+        result = subject.fetch_list_time_pairs(list, card_actions_list)
+
+        expect(result).to match_array([["2014-04-08T18:50:15.000Z", "2014-04-08T18:51:15.000Z"]])
+      end
+    end
+
+    context 'when it does not find pair' do
+      it 'returns an empty list' do
+        card_actions_list = [
+          {
+            action_time: "2014-04-08T18:50:15.000Z",
+            from: 1,
+            to: 2
+          }
+        ]
+
+        list = { id: 2 }
+
+        result = subject.fetch_list_time_pairs(list, card_actions_list)
+
+        expect(result).to be_empty
+      end
+    end
+
+    context 'when it has multiple actions' do
+      it 'does not overwrite pair time when it finds one' do
+        card_actions_list = [
+          {
+            action_time: "2014-04-08T18:50:15.000Z",
+            from: 1,
+            to: 2
+          },
+          {
+            action_time: "2014-04-08T18:51:15.000Z",
+            from: 2,
+            to: 3
+          },
+          {
+            action_time: "2014-04-08T18:52:15.000Z",
+            from: 2,
+            to: 3
+          }
+        ]
+
+        list = { id: 2 }
+
+        result = subject.fetch_list_time_pairs(list, card_actions_list)
+
+        expect(result).to match_array([["2014-04-08T18:50:15.000Z", "2014-04-08T18:51:15.000Z"]])
+      end
+    end
+  end
 end
