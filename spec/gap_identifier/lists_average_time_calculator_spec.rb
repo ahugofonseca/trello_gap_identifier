@@ -1,6 +1,8 @@
 require 'spec_helper'
 
 RSpec.describe GapIdentifier::ListsAverageTimeCalculator do
+  let(:subject) { described_class.new }
+
   before do
     allow(GapIdentifier::CardsFinder).to receive(:call)
     allow(GapIdentifier::ListsFinder).to receive(:call)
@@ -10,13 +12,13 @@ RSpec.describe GapIdentifier::ListsAverageTimeCalculator do
     it 'calls GapIdentifier::CardsFinder.call' do
       expect(GapIdentifier::CardsFinder).to receive(:call)
 
-      described_class.new
+      subject
     end
 
     it 'calls GapIdentifier::ListsFinder.call' do
       expect(GapIdentifier::ListsFinder).to receive(:call)
 
-      described_class.new
+      subject
     end
   end
 
@@ -24,7 +26,7 @@ RSpec.describe GapIdentifier::ListsAverageTimeCalculator do
     it 'calculates the list total time according the number of time pairs' do
       time_pairs_list = [[1, 2]]
 
-      expect(described_class.new.calc_total_time(time_pairs_list)).to eq 1
+      expect(subject.calc_total_time(time_pairs_list)).to eq 1
     end
   end
 
@@ -35,7 +37,7 @@ RSpec.describe GapIdentifier::ListsAverageTimeCalculator do
         cards_list = [list: 1, total_time: 1]
         list_card_size = cards_list.size - 1
 
-        expected_total_time, expected_counter = described_class.new
+        expected_total_time, expected_counter = subject
           .calc_list_total_time_and_counter(list_id, cards_list, list_card_size)
 
         expect(expected_total_time).to eq 1
@@ -49,7 +51,7 @@ RSpec.describe GapIdentifier::ListsAverageTimeCalculator do
         cards_list = [list: 1, total_time: 1]
         list_card_size = cards_list.size - 1
 
-        expected_total_time, expected_counter = described_class.new
+        expected_total_time, expected_counter = subject
           .calc_list_total_time_and_counter(list_id, cards_list, list_card_size)
 
         expect(expected_total_time).to eq 0
@@ -59,8 +61,6 @@ RSpec.describe GapIdentifier::ListsAverageTimeCalculator do
   end
 
   describe '#store_list_average_time' do
-    let(:subject) { described_class.new }
-
     before do
       allow(GapIdentifier::ListsFinder).to receive(:call).and_return([{ id: 1}])
       allow(subject).to receive(:calc_list_total_time_and_counter).and_return([30, 2])
@@ -84,8 +84,6 @@ RSpec.describe GapIdentifier::ListsAverageTimeCalculator do
   end
 
   describe '#fetch_list_time_pairs' do
-    let(:subject) { described_class.new }
-
     context 'when it finds pair' do
       it 'returns time pairs list' do
         card_actions_list = [
@@ -153,6 +151,36 @@ RSpec.describe GapIdentifier::ListsAverageTimeCalculator do
 
         expect(result).to match_array([["2014-04-08T18:50:15.000Z", "2014-04-08T18:51:15.000Z"]])
       end
+    end
+  end
+
+  describe '#trello_card_actions' do
+    let(:card) do
+      { id: '580e8e4ea3afcc1593d1285a' }
+    end
+
+    let(:card_actions_list) do
+      [
+        {
+          action_time: "2014-04-08T18:50:15.000Z",
+          from: 1,
+          to: 2
+        }
+      ]
+    end
+
+    before do
+      allow(GapIdentifier::CardActionsFinder).to receive(:call)
+        .with(card)
+        .and_return(card_actions_list)
+    end
+
+    it 'calls GapIdentifier::CardActionsFinder.call' do
+      expect(GapIdentifier::CardActionsFinder).to receive(:call)
+        .with(card)
+        .and_return(card_actions_list)
+
+      subject.trello_card_actions(card)
     end
   end
 end

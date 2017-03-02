@@ -78,5 +78,9 @@ module GapIdentifier
 
       time_pairs_list
     end
+
+    def trello_card_actions(card)
+      GapIdentifier::CardActionsFinder.call(card)
+    end
   end
 end
