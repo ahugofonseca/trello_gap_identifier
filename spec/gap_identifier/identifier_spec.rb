@@ -47,8 +47,8 @@ RSpec.describe GapIdentifier::Identifier do
                 {
                   list_id: '580f51ba372779f74d8f840a',
                   list: 'To Do (Especificadas e Priorizadas)',
-                  list_average_time: '5 dias, 3 horas, 35 minutos e 8 segundos',
-                  card_total_time: '11 dias, 3 horas, 50 minutos e 33 segundos'
+                  list_average_time: '5 days, 3 hours, 35 minutes and 8 seconds',
+                  card_total_time: '11 days, 3 hours, 50 minutes and 33 seconds'
                 }
               ]
             }

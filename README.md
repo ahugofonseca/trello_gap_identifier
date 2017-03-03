@@ -40,8 +40,8 @@ Output:
       {
         list_id: '580f51ba372779f74d8f840a',
         list: 'To Do',
-        list_average_time: '5 days, 3 hours, 35 minutes e 8 seconds',
-        card_total_time: '11 days, 3 hours, 50 minutes e 33 seconds'
+        list_average_time: '5 days, 3 hours, 35 minutes and 8 seconds',
+        card_total_time: '11 days, 3 hours, 50 minutes and 33 seconds'
       }
     ]
   }

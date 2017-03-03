@@ -5,7 +5,7 @@ module GapIdentifier
         mm, ss = time_in_seconds.divmod(60)
         hh, mm = mm.divmod(60)
         dd, hh = hh.divmod(24)
-        %Q(#{dd} dias, #{hh} horas, #{mm} minutos e #{ss} segundos)
+        %Q(#{dd} days, #{hh} hours, #{mm} minutes and #{ss} seconds)
       end
     end
   end
