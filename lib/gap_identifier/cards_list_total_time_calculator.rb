@@ -10,7 +10,7 @@ module GapIdentifier
         card_actions_list = trello_card_actions(card)
 
         @lists.each do |list|
-          time_pairs_list = fetch_list_times_pair(list, card_actions_list)
+          time_pairs_list = fetch_list_time_pairs(list, card_actions_list)
           total_time      = calc_total_time(time_pairs_list)
 
           next unless total_time > 0
