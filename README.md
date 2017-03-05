@@ -2,7 +2,7 @@
 
 ## Setup ##
 
-1 - Clone repository and run:
+Clone repository and run:
 ```
 $ bundle install
 $ gem build trello_gap_identifier.gemspec
